@@ -3,7 +3,6 @@
 import { data } from '../../constants';
 
 const mockdata: data[] = [];
-
 for (let i = 0; i < 11; i++) {
   mockdata.push({ role: 'Web', name: `kim${i}`, email: `kim${i}@naver.com` });
 }
@@ -14,7 +13,6 @@ for (let i = 0; i < 13; i++) {
     email: `LEE${i + 11}@naver.com}`,
   });
 }
-
 for (let i = 0; i < 10; i++) {
   mockdata.push({
     role: 'Mobile',

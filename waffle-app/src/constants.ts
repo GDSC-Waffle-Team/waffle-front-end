@@ -3,7 +3,7 @@
 //더 바뀔수도 있고, 수정될 수 있음
 
 export type data = {
-  role: string;
-  name: string;
-  email: string;
+  role: string | undefined;
+  name: string | undefined;
+  email: string | undefined;
 };

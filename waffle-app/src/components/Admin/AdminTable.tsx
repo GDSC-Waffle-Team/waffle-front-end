@@ -1,23 +1,31 @@
 //관리자 페이지 구현
-
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.css';
 import mockdata from '../../api/Admin/mockdata';
 import styled from 'styled-components';
-import { Navbar, Nav } from 'react-bootstrap';
+import React from 'react';
+import { useRouter } from 'next/router';
+
 export default function DarkTable() {
+  // 데이터 셀 클릭시
+  const router = useRouter();
+
+  const onclick = (event: React.MouseEvent) => {
+    router.push(
+      {
+        pathname: 'Admin/list',
+        query: {
+          name: event.name,
+          role: event.role,
+          emailAddress: event.email,
+        },
+      },
+      'Admin/list'
+    );
+  };
+
   return (
     <>
-      <div>
-        <header>
-          <Navbar bg="dark" variant="dark">
-            <Navbar.Brand href="#home">관리자 계정</Navbar.Brand>
-            <Nav className="mr-auto">
-              <Nav.Link href="/">홈</Nav.Link>
-            </Nav>
-          </Navbar>
-        </header>
-      </div>
       <StyledtableBody>
         <BootstrapTable
           data={mockdata}
@@ -26,9 +34,13 @@ export default function DarkTable() {
           searchPlaceholder="이름이나 역할을 검색해주세요"
           condensed
           pagination
+          options={{
+            onRowClick: onclick,
+          }}
           search
           bodyStyle={{ color: '#ffd58b' }}
           headerStyle={{ color: '#ffd58b' }}
+          trStyle={{ cursor: 'pointer' }}
         >
           <TableHeaderColumn
             dataField="role"

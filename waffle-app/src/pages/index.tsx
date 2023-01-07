@@ -4,5 +4,5 @@ export default function Home() {
       <h1>안녕?</h1>
       <h2>test</h2>
     </>
-  )
+  );
 }

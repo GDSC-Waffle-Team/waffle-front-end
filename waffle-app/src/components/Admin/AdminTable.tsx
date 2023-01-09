@@ -5,10 +5,34 @@ import mockdata from '../../api/Admin/mockdata';
 import styled from 'styled-components';
 import React from 'react';
 import { useRouter } from 'next/router';
+import { list, fine } from '../../constants';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 export default function DarkTable() {
+  useEffect(() => {
+    adminget();
+  }, []);
   // 데이터 셀 클릭시
   const router = useRouter();
+  const [data, setalldata] = useState<list[]>([]);
+  const init = (datas: list[]) => {
+    datas.forEach((eachdata) => {
+      setalldata([...data, eachdata]);
+    });
+  };
+
+  const adminget = async () => {
+    const headerstr =
+      'Bearer ' + localStorage.getItem('logintoken')?.replace(/\"/gi, '');
+    await axios
+      .get('/api/admin', {
+        headers: {
+          Authorization: headerstr,
+        },
+      })
+      .then((res) => console.log(res.data));
+  };
 
   const onclick = (event: React.MouseEvent) => {
     router.push(
@@ -28,7 +52,7 @@ export default function DarkTable() {
     <>
       <StyledtableBody>
         <BootstrapTable
-          data={mockdata}
+          data={data}
           hover={true}
           striped
           searchPlaceholder="이름이나 역할을 검색해주세요"
@@ -59,7 +83,7 @@ export default function DarkTable() {
               background: '#343a40',
               color: 'white',
             }}
-            dataField="name"
+            dataField={}
             dataSort
             isKey
             dataAlign="center"

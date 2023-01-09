@@ -11,6 +11,10 @@ const nextConfig = {
         source: '/api/member',
         destination: `http://waffle2.duckdns.org/member`,
       },
+      {
+        source: '/api/admin',
+        destination: `http://waffle2.duckdns.org/admin`,
+      },
     ];
   },
 };

@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  compiler: {
+    styledComponents: true,
+  },
   async rewrites() {
     return [
       {
@@ -12,8 +15,8 @@ const nextConfig = {
         destination: `http://waffle2.duckdns.org/member`,
       },
       {
-        source: '/api/admin',
-        destination: `http://waffle2.duckdns.org/admin`,
+        source: '/api/admin/:path*',
+        destination: `http://waffle2.duckdns.org/admin/:path*`,
       },
     ];
   },

@@ -1,37 +1,58 @@
 import { useRouter } from 'next/router';
-import useAdmin from '../../hook/useAdmin';
-import { useEffect } from 'react';
+import axios from 'axios';
 import styled, { css, keyframes } from 'styled-components';
 import Form from 'react-bootstrap/Form';
+import { useEffect, useState } from 'react';
+import { fine } from '../../constants';
+import statusMapping from '../../constants';
 
 export default function AdminList() {
-  const router = useRouter();
-  const { name, role, emailAddress } = router.query;
-  const { user, setUser, setRole, email, setemail } = useAdmin();
-  //unexpected approach
+  const [fines, setFines] = useState<fine[]>([]);
   useEffect(() => {
-    if (!(typeof name === 'string')) {
-      router.replace('/');
-    }
-    if (typeof name === 'string') {
-      setUser(name);
-    }
-
-    if (typeof role === 'string') {
-      setRole(role);
-    }
-
-    if (typeof emailAddress === 'string') {
-      setemail(emailAddress);
-    }
+    getmemberid();
   }, []);
+
+  const router = useRouter();
+  const { id, name, part } = router.query;
+
+  const getmemberid = async () => {
+    const getmemberApiHeader =
+      'Bearer ' + localStorage.getItem('logintoken')?.replace(/\"/gi, '');
+    const getmemberUrl = '/api/admin/' + `${id}/`;
+
+    await axios
+      .get(getmemberUrl, {
+        headers: {
+          Authorization: getmemberApiHeader,
+        },
+      })
+      .then((res) => initSetFines(res.data));
+  };
+
+  const initSetFines = (datas: object) => {
+    const newarr: fine[] = [];
+    Object.values(datas).forEach((value) => {
+      const newFineObj: fine = {
+        id: value.id,
+        memberId: value.memberId,
+        date: value.date,
+        type: value.type,
+        status: value.status,
+      };
+
+      newarr.push(newFineObj);
+    });
+    setFines(newarr);
+  };
+
+  //unexpected approach
 
   return (
     <>
       <StyledProfile>
         <StyledImg src="/GDSC.webp"></StyledImg>
         <h2 style={{ fontWeight: '700' }}>{name}</h2>
-        <StyledP state={role}>{role}</StyledP>
+        <StyledP state={part}>{part}</StyledP>
         <StyledHr />
         <StyledFineArea>
           <form style={{ width: '100%' }}>
@@ -54,6 +75,17 @@ export default function AdminList() {
           </form>
         </StyledFineArea>
       </StyledProfile>
+
+      <StyledDivWrapper>
+        <div style={{ fontWeight: '700' }}>최근 기록</div>
+        {fines.map((eachfine) => (
+          <StyledDiv key={eachfine.id}>
+            <div>{eachfine.date}</div>
+            <div>{statusMapping.get(eachfine.type)}</div>
+            <div>{eachfine.type}</div>
+          </StyledDiv>
+        ))}
+      </StyledDivWrapper>
     </>
     //맴버 ID로 처음 랜더링 될 떄 모든 내역 가져오기
     //납부 false->true (patch 요청),//제거 (delete요청)
@@ -93,6 +125,26 @@ const StyledP = styled.p<{ state: string | undefined | string[] }>`
   ${({ state }) => state === 'Web' && WebStyle}
   ${({ state }) => state === 'Backend' && BackendStyle}
   ${({ state }) => state === 'Mobile' && MobileStyle}
+`;
+
+const StyledDivWrapper = styled.article`
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+  justify-content: space-around;
+  border: 1px solid #f1f1f1;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  overflow-y: scroll;
+  max-height: 600px;
+  gap: 10px;
+`;
+
+const StyledDiv = styled.section`
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin: 0 auto;
 `;
 
 const WebStyle = css`
@@ -163,4 +215,8 @@ const StyledButton = styled.button`
   &:hover {
     opacity: 0.7;
   }
+`;
+
+const StyledRenderFines = styled.article`
+  display: flex;
 `;

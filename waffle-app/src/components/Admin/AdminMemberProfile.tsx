@@ -4,7 +4,7 @@ import styled, { css, keyframes } from 'styled-components';
 import Form from 'react-bootstrap/Form';
 import { useEffect, useState } from 'react';
 import { fine } from '../../constants';
-import statusMapping from '../../constants';
+import { statusMapping, typeMapping } from '../../constants';
 
 export default function AdminList() {
   const [fines, setFines] = useState<fine[]>([]);
@@ -77,12 +77,11 @@ export default function AdminList() {
       </StyledProfile>
 
       <StyledDivWrapper>
-        <div style={{ fontWeight: '700' }}>최근 기록</div>
         {fines.map((eachfine) => (
           <StyledDiv key={eachfine.id}>
             <div>{eachfine.date}</div>
             <div>{statusMapping.get(eachfine.type)}</div>
-            <div>{eachfine.type}</div>
+            <div>{typeMapping.get(eachfine.status)}</div>
           </StyledDiv>
         ))}
       </StyledDivWrapper>
@@ -127,23 +126,26 @@ const StyledP = styled.p<{ state: string | undefined | string[] }>`
   ${({ state }) => state === 'Mobile' && MobileStyle}
 `;
 
-const StyledDivWrapper = styled.article`
+const StyledDivWrapper = styled.section`
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 40%;
   margin: 0 auto;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #f1f1f1;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
   max-height: 600px;
+  text-align: center;
   gap: 10px;
 `;
 
 const StyledDiv = styled.section`
   display: flex;
   justify-content: space-between;
-  width: 50%;
+  align-items: center;
+  width: 60%;
   margin: 0 auto;
 `;
 

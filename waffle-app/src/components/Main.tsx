@@ -20,7 +20,7 @@ const Main = () => {
     e.preventDefault();
     const login = async () => {
       const response = await axios
-        .post('/api/main', {
+        .post(`http://waffle2.duckdns.org/main`, {
           memberId: inputId,
           password: inputPw,
         })

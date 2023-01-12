@@ -17,7 +17,7 @@ const Main = () => {
     setPass(event.target.value);
   };
 
-  const onsubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onsubmit = () => {
     const login = async () => {
       const response = await axios
         .post('/api/main', {
@@ -25,20 +25,19 @@ const Main = () => {
           password: pass,
         })
         .then((responses) => {
-          const setlocal = async () => {
+          const setlocal = () => {
             localStorage.removeItem('logintoken');
             localStorage.setItem('logintoken', responses.data.accessToken);
           };
           setlocal();
         });
     };
-    alert('로그인 되었습니다');
     alert(login());
   };
 
   return (
     <>
-      <form onSubmit={onsubmit} action="/Member">
+      <form onSubmit={onsubmit} action="/Admin">
         <input type="text" onChange={onchange}></input>
         <input type="text" onChange={onchangepass}></input>
         <button type="submit">temp</button>

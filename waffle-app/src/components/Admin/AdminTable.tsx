@@ -42,7 +42,8 @@ export default function DarkTable() {
           Authorization: headerstr,
         },
       })
-      .then((res) => setalldata(res.data));
+      .then((res) => setalldata(res.data))
+      .catch((e) => router.push('/Member'));
   };
 
   return (
@@ -56,6 +57,7 @@ export default function DarkTable() {
           search
           bodyStyle={{ color: '#ffd58b' }}
           headerStyle={{ color: '#ffd58b' }}
+          trStyle={{ cursor: 'pointer' }}
           options={{
             onRowClick: onClick,
           }}
@@ -67,7 +69,7 @@ export default function DarkTable() {
             dataSort={true}
             thStyle={{
               cursor: 'pointer',
-              background: '#343a40;',
+              background: '#343a40',
               color: 'white',
             }}
           >
@@ -91,7 +93,7 @@ export default function DarkTable() {
             dataSort={true}
             thStyle={{
               cursor: 'pointer',
-              background: '#343a40;',
+              background: '#343a40',
               color: 'white',
             }}
           >

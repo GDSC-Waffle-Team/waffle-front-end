@@ -2,35 +2,45 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled, { css, keyframes } from 'styled-components';
 import Form from 'react-bootstrap/Form';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { fine } from '../../constants';
 import { statusMapping, typeMapping } from '../../constants';
+import addFine from '../../api/Postrequests/addFine';
+import deleteFineRequest from '../../api/Deleterequests/deleteFine';
+import { BsXLg } from 'react-icons/bs';
+import {
+  MdOutlineCheckBoxOutlineBlank,
+  MdOutlineCheckBox,
+} from 'react-icons/md';
+import patchStatusRequest from '../../api/PatchRequests/patchStatus';
 
 export default function AdminList() {
+  const dateRef = useRef<HTMLInputElement>(null);
+  const [date, setDate] = useState<string | null>('');
+  const typeRef = useRef<HTMLSelectElement>(null);
+  const [type, setType] = useState<string | null>('10');
+  const newarr: fine[] = [];
   const [fines, setFines] = useState<fine[]>([]);
-  useEffect(() => {
-    getmemberid();
-  }, []);
-
-  const router = useRouter();
-  const { id, name, part } = router.query;
-
-  const getmemberid = async () => {
-    const getmemberApiHeader =
-      'Bearer ' + localStorage.getItem('logintoken')?.replace(/\"/gi, '');
-    const getmemberUrl = '/api/admin/' + `${id}/`;
-
-    await axios
-      .get(getmemberUrl, {
-        headers: {
-          Authorization: getmemberApiHeader,
-        },
-      })
-      .then((res) => initSetFines(res.data));
+  const onChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target === null) {
+      return;
+    }
+    setDate(event.target.value);
   };
 
+  const onChangeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (event.target === null) {
+      return;
+    }
+
+    setType(event.target.value);
+  };
+
+  const onSubmitnewFine = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    addFine(id, date, type);
+  };
   const initSetFines = (datas: object) => {
-    const newarr: fine[] = [];
     Object.values(datas).forEach((value) => {
       const newFineObj: fine = {
         id: value.id,
@@ -39,11 +49,29 @@ export default function AdminList() {
         type: value.type,
         status: value.status,
       };
-
       newarr.push(newFineObj);
     });
     setFines(newarr);
   };
+
+  useEffect(() => {
+    const getmemberid = async () => {
+      const getmemberApiHeader =
+        'Bearer ' + localStorage.getItem('logintoken')?.replace(/\"/gi, '');
+      const getmemberUrl = '/api/admin/' + `${id}/`;
+      await axios
+        .get(getmemberUrl, {
+          headers: {
+            Authorization: getmemberApiHeader,
+          },
+        })
+        .then((res) => initSetFines(res.data));
+    };
+    getmemberid();
+  }, [fines]);
+
+  const router = useRouter();
+  const { id, name, part } = router.query;
 
   //unexpected approach
 
@@ -55,11 +83,15 @@ export default function AdminList() {
         <StyledP state={part}>{part}</StyledP>
         <StyledHr />
         <StyledFineArea>
-          <form style={{ width: '100%' }}>
+          <form style={{ width: '100%' }} onSubmit={onSubmitnewFine}>
             <StyledFineArea>
-              <StyledDate type="date" />
+              <StyledDate ref={dateRef} type="date" onChange={onChangeDate} />
               <StyledFine>
-                <Form.Select aria-label="Default select example">
+                <Form.Select
+                  aria-label="Default select example"
+                  ref={typeRef}
+                  onChange={onChangeType}
+                >
                   <option value="10">지각</option>
                   <option value="01">결석</option>
                   <option value="00">과제 미제출</option>
@@ -81,7 +113,33 @@ export default function AdminList() {
           <StyledDiv key={eachfine.id}>
             <div>{eachfine.date}</div>
             <div>{statusMapping.get(eachfine.type)}</div>
-            <div>{typeMapping.get(eachfine.status)}</div>
+            <div>
+              {typeMapping.get(eachfine.status)}
+              {eachfine.status === false && (
+                <span
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => patchStatusRequest(eachfine.id, id)}
+                >
+                  <MdOutlineCheckBoxOutlineBlank
+                    style={{ fontSize: '1.5rem' }}
+                  />
+                </span>
+              )}
+              {eachfine.status === true && (
+                <span
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => patchStatusRequest(eachfine.id, id)}
+                >
+                  <MdOutlineCheckBox
+                    name="check"
+                    style={{ fontSize: '1.5rem', color: '#89CFF0' }}
+                  />
+                </span>
+              )}
+            </div>
+            <StyledDeleteDiv onClick={() => deleteFineRequest(eachfine.id, id)}>
+              <BsXLg />
+            </StyledDeleteDiv>
           </StyledDiv>
         ))}
       </StyledDivWrapper>
@@ -108,6 +166,14 @@ const StyledProfile = styled.div`
   animation: ${fadein} 1.3s linear;
 `;
 
+const StyledDeleteDiv = styled.div`
+  &:hover {
+    opacity: 0.7;
+  }
+  color: red;
+  cursor: pointer;
+`;
+
 const StyledImg = styled.img`
   width: 100%;
   height: 150px;
@@ -130,22 +196,22 @@ const StyledDivWrapper = styled.section`
   display: flex;
   flex-direction: column;
   width: 40%;
-  margin: 0 auto;
+  margin: 5px auto;
+  margin-bottom: 15px;
   justify-content: center;
   align-items: center;
   border: 1px solid #f1f1f1;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
-  max-height: 600px;
+  max-height: 400px;
   text-align: center;
   gap: 10px;
 `;
 
 const StyledDiv = styled.section`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 60%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 80%;
   margin: 0 auto;
 `;
 

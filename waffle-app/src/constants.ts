@@ -23,14 +23,20 @@ type list = {
   fines: fine[];
 };
 
+type addfine = {
+  memberId: string | undefined | string[];
+  date: string;
+  type: string;
+};
+
 const statusMapping = new Map();
 statusMapping.set('10', '지각');
 statusMapping.set('01', '결석');
 statusMapping.set('00', '과제 미제출');
 
 const typeMapping = new Map();
-typeMapping.set(false, '미제출');
-typeMapping.set(true, '제출');
+typeMapping.set(false, '미납');
+typeMapping.set(true, '완납');
 
 export { statusMapping, typeMapping };
-export type { data, fine, list };
+export type { data, fine, list, addfine };

@@ -3,7 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import router from 'next/router';
 
-const Member = () => {
+const MemberInfo = () => {
   const [fineCount, setFineCount] = useState<number>(); // 총 벌금 납부 횟수 n
   const [fineValue, setFineValue] = useState<number>(); // 총 벌금액
   const [statusValue, setStatusValue] = useState<number>(); // 벌금 납부 완료 금액
@@ -183,8 +183,6 @@ const Member = () => {
   );
 };
 
-export default Member;
-
 const TableTitle = styled.div`
   padding: 20px 0px 3px 20px;
   color: #858585;
@@ -294,3 +292,5 @@ const StyledLogo = styled.div`
 const MypageBox = styled.div`
   padding: 30px;
 `;
+
+export default MemberInfo;

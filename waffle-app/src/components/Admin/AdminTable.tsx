@@ -43,7 +43,7 @@ export default function DarkTable() {
         },
       })
       .then((res) => setalldata(res.data))
-      .catch((e) => router.push('/Member'));
+      .catch((e) => router.push('https://waffle-front-end.vercel.app/Member'));
   };
 
   return (

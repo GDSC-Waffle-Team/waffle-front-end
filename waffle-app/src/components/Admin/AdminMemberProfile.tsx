@@ -39,6 +39,7 @@ export default function AdminList() {
   const onSubmitnewFine = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     addFine(id, date, type);
+    router.push('/Admin');
   };
   const initSetFines = (datas: object) => {
     Object.values(datas).forEach((value) => {
@@ -68,7 +69,7 @@ export default function AdminList() {
         .then((res) => initSetFines(res.data));
     };
     getmemberid();
-  }, [fines]);
+  }, []);
 
   const router = useRouter();
   const { id, name, part } = router.query;
@@ -118,7 +119,10 @@ export default function AdminList() {
               {eachfine.status === false && (
                 <span
                   style={{ cursor: 'pointer' }}
-                  onClick={() => patchStatusRequest(eachfine.id, id)}
+                  onClick={() => {
+                    patchStatusRequest(eachfine.id, id);
+                    router.push('/Admin');
+                  }}
                 >
                   <MdOutlineCheckBoxOutlineBlank
                     style={{ fontSize: '1.5rem' }}
@@ -128,7 +132,10 @@ export default function AdminList() {
               {eachfine.status === true && (
                 <span
                   style={{ cursor: 'pointer' }}
-                  onClick={() => patchStatusRequest(eachfine.id, id)}
+                  onClick={() => {
+                    patchStatusRequest(eachfine.id, id);
+                    router.push('/Admin');
+                  }}
                 >
                   <MdOutlineCheckBox
                     name="check"
@@ -137,7 +144,12 @@ export default function AdminList() {
                 </span>
               )}
             </div>
-            <StyledDeleteDiv onClick={() => deleteFineRequest(eachfine.id, id)}>
+            <StyledDeleteDiv
+              onClick={() => {
+                deleteFineRequest(eachfine.id, id);
+                router.push('/Admin');
+              }}
+            >
               <BsXLg />
             </StyledDeleteDiv>
           </StyledDiv>

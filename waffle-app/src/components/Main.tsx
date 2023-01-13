@@ -32,7 +32,7 @@ const Main = () => {
     login()
       .then(() => {
         swal('로그인 되었습니다!');
-        router.push('/Admin');
+        router.push('/Member');
       })
       .catch(() => swal('정보를 다시 입력해주세요'));
 

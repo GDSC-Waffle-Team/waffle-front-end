@@ -154,8 +154,8 @@ const MemberInfo = () => {
           </VB2Box>
         </ValueBox>
         <CountBox>
-          <div>지각{fine4NSubmitted}</div>
-          <div>미제출 {fine4Late}</div>
+          <div>지각{fine4Late}</div>
+          <div>미제출 {fine4NSubmitted}</div>
           <div>결석 {absenceCount}</div>
         </CountBox>
         <TableTitle>벌금 내역</TableTitle>
@@ -165,7 +165,7 @@ const MemberInfo = () => {
               <StyledTr key={fine.id}>
                 <StyledTd>{fine.date}</StyledTd>
                 <StyledTd>
-                  {fine.type == '10'
+                  {fine.type == '00'
                     ? '지각'
                     : fine.type == '01'
                     ? '결석'

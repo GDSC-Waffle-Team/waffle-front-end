@@ -96,9 +96,9 @@ export default function AdminList() {
                   ref={typeRef}
                   onChange={onChangeType}
                 >
-                  <option value="10">지각</option>
+                  <option value="00">지각</option>
                   <option value="01">결석</option>
-                  <option value="00">과제 미제출</option>
+                  <option value="10">과제 미제출</option>
                 </Form.Select>
               </StyledFine>
             </StyledFineArea>

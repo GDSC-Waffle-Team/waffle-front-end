@@ -66,7 +66,10 @@ export default function AdminList() {
             Authorization: getmemberApiHeader,
           },
         })
-        .then((res) => initSetFines(res.data));
+        .then((res) => {
+          initSetFines(res.data);
+          console.log(res.data);
+        });
     };
     getmemberid();
   }, []);

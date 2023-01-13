@@ -20,7 +20,22 @@ export default function DarkTable() {
     });
   };
   useEffect(() => {
-    adminget();
+    const adminget = async () => {
+      const headerstr =
+        'Bearer ' + localStorage.getItem('logintoken')?.replace(/\"/gi, '');
+      await axios
+        .get('/api/admin', {
+          headers: {
+            Authorization: headerstr,
+          },
+        })
+        .then((res) => setalldata(res.data))
+        .catch((e) => router.push('/Member'));
+    };
+
+    adminget().catch((e) =>
+      router.push('https://waffle-front-end.vercel.app/Member')
+    );
   }, []);
 
   const onClick = (row: list) => {
@@ -31,19 +46,6 @@ export default function DarkTable() {
       },
       'detail'
     );
-  };
-
-  const adminget = async () => {
-    const headerstr =
-      'Bearer ' + localStorage.getItem('logintoken')?.replace(/\"/gi, '');
-    await axios
-      .get('/api/admin', {
-        headers: {
-          Authorization: headerstr,
-        },
-      })
-      .then((res) => setalldata(res.data))
-      .catch((e) => router.push('/Member'));
   };
 
   return (

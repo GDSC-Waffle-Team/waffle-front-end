@@ -42,7 +42,7 @@ const MemberInfo = () => {
           setMemberInfo(response.data);
         });
     };
-    getInfo();
+    getInfo().catch((e) => router.push('/Admin'));
   }, []);
 
   // 맴버의 벌금 내역 중 n을 계산하는 함수

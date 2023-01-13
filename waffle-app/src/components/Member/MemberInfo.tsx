@@ -165,11 +165,11 @@ const MemberInfo = () => {
               <StyledTr key={fine.id}>
                 <StyledTd>{fine.date}</StyledTd>
                 <StyledTd>
-                  {fine.type == '00'
+                  {fine.type == '10'
                     ? '지각'
                     : fine.type == '01'
                     ? '결석'
-                    : fine.type == '10'
+                    : fine.type == '00'
                     ? '미제출'
                     : ''}
                 </StyledTd>

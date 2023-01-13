@@ -30,9 +30,9 @@ type addfine = {
 };
 
 const statusMapping = new Map();
-statusMapping.set('10', '지각');
+statusMapping.set('00', '지각');
 statusMapping.set('01', '결석');
-statusMapping.set('00', '과제 미제출');
+statusMapping.set('10', '과제 미제출');
 
 const typeMapping = new Map();
 typeMapping.set(false, '미납');

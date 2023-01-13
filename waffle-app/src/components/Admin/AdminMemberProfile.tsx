@@ -18,7 +18,7 @@ export default function AdminList() {
   const dateRef = useRef<HTMLInputElement>(null);
   const [date, setDate] = useState<string | null>('');
   const typeRef = useRef<HTMLSelectElement>(null);
-  const [type, setType] = useState<string | null>('10');
+  const [type, setType] = useState<string | null>('00');
   const newarr: fine[] = [];
   const [fines, setFines] = useState<fine[]>([]);
   const onChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {

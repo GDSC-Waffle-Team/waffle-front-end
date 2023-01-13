@@ -29,7 +29,7 @@ export default function DarkTable() {
             Authorization: headerstr,
           },
         })
-        .then((res) => setalldata(res.data))
+        .then((res) => setalldata(res.data.filter((eachdata: list) => eachdata.part !== 'admin')))
         .catch((e) => router.push('/Member'));
     };
 

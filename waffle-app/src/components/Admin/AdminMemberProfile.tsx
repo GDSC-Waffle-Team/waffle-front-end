@@ -37,7 +37,6 @@ export default function AdminList() {
   };
 
   const onSubmitnewFine = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
     addFine(id, date, type);
     router.push('/Admin');
   };
